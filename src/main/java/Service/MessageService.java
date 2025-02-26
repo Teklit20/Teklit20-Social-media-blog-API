@@ -22,12 +22,12 @@ public class MessageService {
     public Message getMessageById(int messageId) {
         return messageDAO.getMessageById(messageId);
     }
-    /*
+    
 
-    public boolean deleteMessageById(int messageId) {
+    public Boolean deleteMessageById(int messageId) {
         return messageDAO.deleteMessageById(messageId);
     }
-
+/* 
     public Message updateMessageById(int messageId, Message updatedMessage) {
         return messageDAO.updateMessageById(messageId, updatedMessage);
     }
