@@ -27,7 +27,7 @@ public class MessageService {
     public Boolean deleteMessageById(int messageId) {
         return messageDAO.deleteMessageById(messageId);
     }
-/* 
+
     public Message updateMessageById(int messageId, Message updatedMessage) {
         return messageDAO.updateMessageById(messageId, updatedMessage);
     }
@@ -36,5 +36,5 @@ public class MessageService {
         return messageDAO.getMessagesByUserId(userId);
     }
 
-    */
+    
 }

@@ -20,5 +20,14 @@ public class AccountService {
         
         return null;
     }
+    public Account login(String username, String password) {
+        Account account = accountDAO.getAccountByUsername(username);
+        
+        if (account == null || !account.getPassword().equals(password)) {
+            return null; // Invalid username or password
+        }
+
+        return account; // Successful login
+    }
     
 }

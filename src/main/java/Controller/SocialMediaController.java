@@ -48,13 +48,14 @@ public class SocialMediaController {
         }
     }
     private void loginUser(Context ctx) {
-        Account account = ctx.bodyAsClass(Account.class);
-        Account loggedInAccount = accountService.authenticateUser(account);
-        if (loggedInAccount != null) {
-            ctx.json(loggedInAccount);
-        } else {
-            ctx.status(401).result("Invalid credentials.");
-        }
+        Account loginRequest = ctx.bodyAsClass(Account.class);
+    Account account = accountService.login(loginRequest.getUsername(), loginRequest.getPassword());
+
+    if (account == null) {
+        ctx.status(401).result(""); // Return empty body for invalid login
+    } else {
+        ctx.status(200).json(account);
+    }
     }
 
     private void createMessage(Context ctx) {
@@ -93,12 +94,23 @@ public class SocialMediaController {
     }
 
     private void updateMessage(Context ctx) {
-        ctx.json("sample text");
+        int messageId = Integer.parseInt(ctx.pathParam("id"));
+        Message updatedMessage = ctx.bodyAsClass(Message.class);
+        Message result = messageService.updateMessageById(messageId, updatedMessage);
+        if (result != null) {
+            ctx.json(result);
+        } else {
+            ctx.status(400).result("Update failed.");
+        }
     }
-
+   
     private void getMessagesByUser(Context ctx) {
-        ctx.json("sample text");
+        int accountId = Integer.parseInt(ctx.pathParam("accountId"));
+        List<Message> messages = messageService.getMessagesByUserId(accountId);
+        if (!messages.isEmpty()) {
+            ctx.json(messages);
+        } else {
+            ctx.status(404).result("No messages found for this user.");
+        }
     }
-
-
 }
