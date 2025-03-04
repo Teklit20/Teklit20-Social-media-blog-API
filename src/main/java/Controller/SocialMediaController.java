@@ -64,7 +64,7 @@ public class SocialMediaController {
         if (createdMessage != null) {
             ctx.json(createdMessage);
         } else {
-            ctx.status(400).result("Invalid message data.");
+            ctx.status(400).result("");// I MAKE IT EMPTY
         }
     }
 
