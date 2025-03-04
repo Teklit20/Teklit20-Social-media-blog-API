@@ -89,18 +89,24 @@ public class SocialMediaController {
         if (deletedMessage==true) {
             ctx.status(200).json(deletedMessage);
         } else {
-           // ctx.status(200);
+           //ctx.status(404).result("");
         }
     }
 
     private void updateMessage(Context ctx) {
         int messageId = Integer.parseInt(ctx.pathParam("id"));
         Message updatedMessage = ctx.bodyAsClass(Message.class);
+
+        if (updatedMessage.getMessage_text() == null || updatedMessage.getMessage_text().isEmpty()) {
+            ctx.status(400);
+            return;
+        }
+        // updating the message
         Message result = messageService.updateMessageById(messageId, updatedMessage);
         if (result != null) {
-            ctx.json(result);
+            ctx.json(result); 
         } else {
-            ctx.status(400).result("Update failed.");
+            ctx.status(400);
         }
     }
    
@@ -110,7 +116,7 @@ public class SocialMediaController {
         if (!messages.isEmpty()) {
             ctx.json(messages);
         } else {
-            ctx.status(404).result("No messages found for this user.");
+            ctx.status(404).result("No messages found");
         }
     }
 }
