@@ -6,6 +6,7 @@ import Service.*;
 import Model.*;
 import java.util.Optional;
 import java.util.List;
+import java.util.Map;
 
 /**
  * TODO: You will need to write your own endpoints and handlers for your controller. The endpoints you will need can be
@@ -78,19 +79,16 @@ public class SocialMediaController {
         Message message = messageService.getMessageById(messageId);
         if (message != null) {
             ctx.json(message);
-        } else {
-            ctx.status(404).result("Message not found.");
-        }
+        } 
     }
 
     private void deleteMessageById(Context ctx) {
         int id = Integer.parseInt(ctx.pathParam("id"));
-        Boolean deletedMessage = messageService.deleteMessageById(id);
-        if (deletedMessage==true) {
-            ctx.status(200).json(deletedMessage);
-        } else {
-           //ctx.status(404).result("");
-        }
+        Message deletedMessage = messageService.getMessageById(id);
+
+        if (deletedMessage != null && messageService.deleteMessageById(id)) {
+            ctx.status(200).json(deletedMessage); // Return the deleted message
+        } 
     }
 
     private void updateMessage(Context ctx) {
@@ -111,12 +109,15 @@ public class SocialMediaController {
     }
    
     private void getMessagesByUser(Context ctx) {
-        int accountId = Integer.parseInt(ctx.pathParam("accountId"));
-        List<Message> messages = messageService.getMessagesByUserId(accountId);
-        if (!messages.isEmpty()) {
+        try {
+            int accountId = Integer.parseInt(ctx.pathParam("accountId"));
+            List<Message> messages = messageService.getMessagesByUserId(accountId);
+    
             ctx.json(messages);
-        } else {
-            ctx.status(404).result("No messages found");
+            ctx.status(200); 
+    
+        } catch (NumberFormatException e) {
+            ctx.status(400).json(Map.of("error", "Invalid account"));
         }
     }
 }
